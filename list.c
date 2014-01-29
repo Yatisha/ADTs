@@ -32,13 +32,15 @@ void list_push(lnodeptr *ptr,int num)
         }
         else{
         
-                while(temp != NULL){
+                /*while(temp != NULL){
                 	temp = temp->nextptr;
-                }
+                }*/
 
-                temp = (lnodeptr)malloc(sizeof(lnode));
-				(temp)->elem = num;
-                (temp)->nextptr = NULL;
+                lnodeptr temp2 = (lnodeptr)malloc(sizeof(lnode));
+				(temp2)->elem = num;
+                (temp2)->nextptr = temp;
+                 *ptr = temp2; 
+                
           
              
         }
@@ -79,13 +81,20 @@ void list_delete(lnodeptr * p)
 void list_pop(lnodeptr * p)
 {
 	if(p=NULL){
+
 		printf("list is empty cant pop");
+
+	}else if((*p)==NULL){
+
+		printf("list is empty cant pop");
+
 	}else{
 
-		lnodeptr temp;
-		while(temp->nextptr != NULL){}
-		temp=NULL;
-		free(temp);
+		lnodeptr temp = (*p);
+		(*p) = (*p)->nextptr;
+		//free(temp);
+		temp = NULL;
+		
 	}
 }
 
@@ -93,11 +102,16 @@ int main(void)
 {
 	
 	lnodeptr head = NULL;
+	printf("%p",head);
 	list_push(&head,5);
+	printf("%d \n",head->elem);
 	list_push(&head,6);
+	printf("%d \n",(head)->elem);
 	list_push(&head,7);
+	printf("%d \n",((head)->elem));
 	list_push(&head,8);
-	printf("%p",(head->nextptr));
+	printf("%d \n",(head)-> elem);
+	list_pop(&head);
 	printf("%d",list_length(head));
 	return 0;
 }
