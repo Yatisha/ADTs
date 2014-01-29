@@ -32,17 +32,16 @@ void list_push(lnodeptr *ptr,int num)
         }
         else{
         
-                /*while(temp != NULL){
+                while(temp->nextptr != NULL){
                 	temp = temp->nextptr;
-                }*/
+                }
 
                 lnodeptr temp2 = (lnodeptr)malloc(sizeof(lnode));
 				(temp2)->elem = num;
-                (temp2)->nextptr = temp;
-                 *ptr = temp2; 
-                
-          
-             
+                (temp2)->nextptr = NULL;
+
+                temp->nextptr = temp2;
+                   
         }
 }
 
@@ -69,31 +68,45 @@ void list_delete(lnodeptr * p)
 {
 	if(p == NULL){
 		printf("list is empty");
+	}else if((*p) == NULL){
+		printf("list is empty");
 	}else{
 		int i=0;
-		for(i=0; i < list_length(*p);i++)
+		for(i=0; i <=list_length(*p);i++)
 		{
 			list_pop(p);
 		}
+		free(*p);
+		*p = NULL;
 	}
+
 }
 
 void list_pop(lnodeptr * p)
 {
+	lnodeptr temp3 = (*p);
 	if(p=NULL){
 
 		printf("list is empty cant pop");
 
-	}else if((*p)==NULL){
+	}
+	else if(temp3==NULL){
 
 		printf("list is empty cant pop");
 
-	}else{
+	}
+	else{
 
-		lnodeptr temp = (*p);
-		(*p) = (*p)->nextptr;
-		//free(temp);
-		temp = NULL;
+		/*lnodeptr temp3 = *p;*/ /*why does this give segmentation fault*/
+		while(((temp3->nextptr)->nextptr)!= NULL)
+		{
+                (temp3) = (temp3)->nextptr;
+        }
+
+        lnodeptr temp4 = temp3->nextptr;
+        free(temp4);
+        temp4 = NULL;
+        temp3->nextptr = NULL;
 		
 	}
 }
@@ -101,7 +114,7 @@ void list_pop(lnodeptr * p)
 int main(void)
 {
 	
-	lnodeptr head = NULL;
+	lnodeptr head;
 	printf("%p",head);
 	list_push(&head,5);
 	printf("%d \n",head->elem);
@@ -110,8 +123,12 @@ int main(void)
 	list_push(&head,7);
 	printf("%d \n",((head)->elem));
 	list_push(&head,8);
-	printf("%d \n",(head)-> elem);
+	printf("%d \n",((head)-> nextptr)->elem);
+	printf("%d",list_length(head));
 	list_pop(&head);
 	printf("%d",list_length(head));
+	list_delete(&head);
+	printf("%d",list_length(head));
+	printf("%p",head);
 	return 0;
 }
